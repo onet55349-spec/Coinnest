@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Identity | CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <div class="bg-container"></div>
+
+    <div class="main-wrapper" style="min-height: 100vh; padding: 20px;">
+        <div class="status-bar"
+            style="display: flex; justify-content: space-between; padding: 5px 0 15px; font-size: 12px; font-weight: 600; opacity: 0.8;">
+
+            <div style="display: flex; gap: 5px;">
+
+            </div>
+            <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 18px;"><i
+                    class="ph-bold ph-x"></i></a>
+        </div>
+
+        <div class="verify-wrapper">
+            <div class="verify-header">
+                <h1 class="verify-title">Verify Your Identity</h1>
+                <p class="verify-subtitle">Secure your account by verifying your identity</p>
+            </div>
+
+            <div class="doc-selection">
+                <div class="doc-card" onclick="selectDoc(this)">
+                    <i class="ph ph-identification-card"></i>
+                    <span>ID Card<br>Use your ID Card</span>
+                </div>
+                <div class="doc-card active" onclick="selectDoc(this)">
+                    <i class="ph ph-passport"></i>
+                    <span>Passport<br>Use your Passport</span>
+                </div>
+                <div class="doc-card" onclick="selectDoc(this)">
+                    <i class="ph ph-cardholder"></i>
+                    <span>Driver's<br>License</span>
+                </div>
+            </div>
+
+            <div class="upload-zone" onclick="document.getElementById('file-upload').click()">
+                <input type="file" id="file-upload" style="display: none;" accept="image/*">
+                <div class="upload-icon">
+                    <i class="ph-bold ph-upload-simple"></i>
+                </div>
+                <span class="upload-text">Upload Image</span>
+                <p class="upload-hint">Tap to select your document photo</p>
+            </div>
+
+            <button class="cta-btn primary-cta verify-submit" onclick="submitVerification()">Submit for
+                Approval</button>
+        </div>
+    </div>
+
+    <script>
+        function selectDoc(element) {
+            document.querySelectorAll('.doc-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function submitVerification() {
+            alert('Your identity verification has been submitted for approval. This usually takes 24-48 hours.');
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+        <div class="side-menu-list">
+
+            <a href="history.html" class="side-menu-item">
+                <i class="ph-fill ph-clock-counter-clockwise"></i>
+                Trade History
+            </a>
+            <a href="support.html" class="side-menu-item">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="help.html" class="side-menu-item">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+            <a href="index.html" class="side-menu-item logout-item">
+                <i class="ph-bold ph-sign-out"></i>
+                Log Out
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #050505 100%);
+            border: 2px solid #ff4d4d;
+            border-radius: 28px;
+            padding: 50px 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(255, 77, 77, 0.2);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-icon {
+            width: 90px;
+            height: 90px;
+            background: transparent;
+            color: #ff4d4d;
+            border: 4px solid #ff4d4d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 30px;
+        }
+    </style>
+
+    <div class="main-wrapper dash-wrapper" style="padding-top: 10px;">
+        <header class="dash-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="ph ph-list" style="font-size: 24px; color: #fff; cursor: pointer;"
+                    onclick="toggleSidebar()"></i>
+                <h1 class="reg-logo" style="margin-bottom: 0;">CoinNest</h1>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="notifications.html" style="text-decoration: none;"><i class="ph ph-bell"
+                        style="font-size: 22px; color: #fff;"></i></a>
+                <a href="profile.html" style="text-decoration: none;"><i class="ph ph-user-circle"
+                        style="font-size: 22px; color: #fff;"></i></a>
+            </div>
+        </header>
+
+        <!-- Total Asset Card -->
+        <div class="wallet-overview-card"
+            style="margin-top: 25px; background: linear-gradient(135deg, rgba(255,179,0,0.15) 0%, rgba(5,5,5,0) 100%); border: 1px solid rgba(255,179,0,0.2); padding: 30px; border-radius: 24px; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; right: -20px; top: -20px; font-size: 120px; opacity: 0.03; color: var(--primary);">
+                <i class="ph ph-wallet"></i>
+            </div>
+            <span
+                style="font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px;">Total
+                Account Balance</span>
+            <div style="display: flex; align-items: baseline; gap: 10px; margin: 10px 0;">
+                <h2 id="user-balance-display-val" style="font-size: 42px; font-weight: 900; color: #fff;">$0.00</h2>
+                <span style="font-size: 16px; font-weight: 700; color: var(--primary);">USDT</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <div
+                    style="font-size: 11px; color: #00c9a7; background: rgba(0,201,167,0.1); padding: 4px 12px; border-radius: 20px; font-weight: 800;">
+                    <i class="ph-fill ph-shield-check"></i> SECURED BY COINNEST
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+            <div class="wallet-action-box active" onclick="switchWalletTab('deposit')" id="tab-deposit"
+                style="background: rgba(255,255,255,0.03); border: 2px solid var(--primary); padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.2s;">
+                <i class="ph-fill ph-arrow-circle-down"
+                    style="font-size: 32px; color: var(--primary); margin-bottom: 10px;"></i>
+                <h3 style="font-size: 14px; font-weight: 700; color: #fff;">Deposit</h3>
+            </div>
+            <div class="wallet-action-box" onclick="switchWalletTab('withdraw')" id="tab-withdraw"
+                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.2s;">
+                <i class="ph-fill ph-arrow-circle-up" style="font-size: 32px; color: #ff4d4d; margin-bottom: 10px;"></i>
+                <h3 style="font-size: 14px; font-weight: 700; color: #fff;">Withdraw</h3>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Section -->
+        <div id="wallet-content-area" style="margin-top: 25px;">
+            <div id="deposit-ui">
+                <div
+                    style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 24px;">
+                    <div style="display: flex; gap: 20px; align-items: start; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label
+                                style="font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase;">USDT
+                                Deposit Address (BEP20)</label>
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 12px;">Only send
+                                Tether (USDT) via Binance Smart Chain.</p>
+                            <div
+                                style="background: #000; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); font-family: monospace; word-break: break-all; font-size: 13px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+                                <span id="deposit-address-val">0x8920...2a78</span>
+                                <i class="ph ph-copy" style="color: var(--primary); cursor: pointer;"
+                                    onclick="alert('Address copied to clipboard!')"></i>
+                            </div>
+                        </div>
+                        <div style="background: #fff; padding: 8px; border-radius: 12px; width: 120px; margin: 0 auto;">
+                            <img id="deposit-qr-img"
+                                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x8920...2a78"
+                                alt="QR" style="width: 100%; display: block;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="withdraw-ui" style="display: none;">
+                <form class="reg-form" onsubmit="event.preventDefault(); showWithdrawModal();">
+                    <div class="input-group">
+                        <label>Asset</label>
+                        <div class="input-field">
+                            <select
+                                style="background: rgba(0,0,0,0.3); border:none; width:100%; color:#fff; padding:12px; outline:none;">
+                                <option>USDT (Tether)</option>
+                                <option>BTC (Bitcoin)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Destination Address</label>
+                        <div class="input-field"><input type="text" placeholder="Paste external wallet address..."
+                                required style="background: rgba(0,0,0,0.3);"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Amount (USDT)</label>
+                        <div class="input-field"><input type="number" placeholder="Min 10.00" required
+                                style="background: rgba(0,0,0,0.3);"></div>
+                    </div>
+                    <button type="submit" class="cta-btn primary-cta" style="margin-top: 10px;">Request Payout</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Advanced Deposit/Transaction Table Arrangement -->
+        <div style="margin-top: 35px; padding-bottom: 100px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="font-size: 18px; font-weight: 800; color: #fff;">Account Statement</h2>
+                <a href="history.html"
+                    style="font-size: 12px; color: var(--primary); font-weight: 700; text-decoration: none;">Full
+                    History <i class="ph ph-caret-right"></i></a>
+            </div>
+
+            <div
+                style="background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
+                <table
+                    style="width: 100%; min-width: 350px; border-collapse: collapse; font-size: 13px; text-align: left;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.4);">
+                            <th style="padding: 15px;">Activity</th>
+                            <th style="padding: 15px;">Amount</th>
+                            <th style="padding: 15px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                            <td style="padding: 15px;">
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <div
+                                        style="width: 32px; height: 32px; border-radius: 8px; background: rgba(0,201,167,0.1); color: #00c9a7; display: flex; align-items: center; justify-content: center;">
+                                        <i class="ph ph-download-simple"></i>
+                                    </div>
+                                    <div>
+                                        <div style="color: #fff; font-weight: 700;">Deposit</div>
+                                        <div style="font-size: 10px; opacity: 0.4;">Just now</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 15px; color: #00c9a7; font-weight: 700;">+ 0.00 USDT</td>
+                            <td style="padding: 15px;"><span
+                                    style="color: #ff4d4d; font-size: 11px; font-weight: 800;">PENDING</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px;">
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <div
+                                        style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,179,0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                                        <i class="ph ph-upload-simple"></i>
+                                    </div>
+                                    <div>
+                                        <div style="color: #fff; font-weight: 700;">Withdraw</div>
+                                        <div style="font-size: 10px; opacity: 0.4;">Mar 28</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 15px; color: #fff;">- 50.00 USDT</td>
+                            <td style="padding: 15px;"><span
+                                    style="color: #00c9a7; font-size: 11px; font-weight: 800;">SUCCESS</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Required Modal -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal-content" style="border: 2px solid #ff4d4d; padding: 50px 30px;">
+            <div class="modal-icon"
+                style="background: transparent; color: #ff4d4d; border: 4px solid #ff4d4d; width: 90px; height: 90px; margin-bottom: 30px;">
+                <i class="ph-fill ph-warning-octagon"></i>
+            </div>
+            <h3
+                style="color: #fff; font-size: 32px; font-weight: 800; margin-bottom: 15px; font-family: 'Montserrat', sans-serif;">
+                Action Required</h3>
+            <p
+                style="color: rgba(255,255,255,0.6); font-size: 16px; line-height: 1.5; margin-bottom: 40px; max-width: 90%; margin-left: auto; margin-right: auto;">
+                Your withdrawal request was flagged for manual verification. Please contact <span
+                    style="color: #fff; font-weight: 700;">Customer Care</span> to authorize this transaction.
+            </p>
+            <button class="cta-btn primary-cta" onclick="window.location.href='support.html'"
+                style="background: #FFB300; color: #000; border: none; font-size: 18px; font-weight: 800; padding: 18px; box-shadow: 0 10px 30px rgba(255, 179, 0, 0.3);">
+                Contact Customer Care
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-chart-bar"></i>
+            <span>Markets</span>
+        </a>
+        <a href="trade.html" class="nav-item">
+            <i class="ph ph-arrows-left-right"></i>
+            <span>Trade</span>
+        </a>
+        <a href="wallet.html" class="nav-item active">
+            <i class="ph-fill ph-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <i class="ph ph-bell"></i>
+            <span>Alerts</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+
+        function switchWalletTab(tab) {
+            const depositUI = document.getElementById('deposit-ui');
+            const withdrawUI = document.getElementById('withdraw-ui');
+            const tabDep = document.getElementById('tab-deposit');
+            const tabWit = document.getElementById('tab-withdraw');
+
+            if (tab === 'deposit') {
+                depositUI.style.display = 'block';
+                withdrawUI.style.display = 'none';
+                tabDep.style.borderColor = 'var(--primary)';
+                tabWit.style.borderColor = 'rgba(255,255,255,0.05)';
+            } else {
+                depositUI.style.display = 'none';
+                withdrawUI.style.display = 'block';
+                tabWit.style.borderColor = '#ff4d4d';
+                tabDep.style.borderColor = 'rgba(255,255,255,0.05)';
+            }
+        }
+
+        function showWithdrawModal() {
+            document.getElementById('withdrawModal').style.display = 'flex';
+        }
+
+        // Admin-Controlled Dynamic Loader
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update Deposit Address
+            const activeAddress = localStorage.getItem('platform_usdt_address');
+            if (activeAddress && document.getElementById('deposit-address-val')) {
+                document.getElementById('deposit-address-val').innerText = activeAddress;
+                // Update QR accordingly
+                document.getElementById('deposit-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${activeAddress}`;
+            }
+
+            // Override QR if custom image uploaded
+            const customQR = localStorage.getItem('platform_qr_url');
+            if (customQR && customQR.trim() !== "") {
+                const qrImg = document.getElementById('deposit-qr-img');
+                if (qrImg) qrImg.src = customQR;
+            }
+
+            // Sync User Balance
+            const adminBalance = localStorage.getItem('user_balance');
+            if (adminBalance) {
+                const displayEl = document.getElementById('user-balance-display-val');
+                if (displayEl) displayEl.innerText = `$${parseFloat(adminBalance).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

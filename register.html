@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Account | CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="bg-container"></div>
+
+    <div class="reg-wrapper">
+        <div class="reg-card">
+            <a href="index.html" class="close-btn"><i class="ph-bold ph-x"></i></a>
+            
+            <div class="reg-header">
+                <span class="reg-logo">CoinNest</span>
+                <h2 class="reg-subtitle">Create Your Account</h2>
+            </div>
+
+            <form class="reg-form" onsubmit="saveRegistrationData(event)">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>First Name</label>
+                        <div class="input-field">
+                            <input type="text" id="reg-first-name" placeholder="First Name" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Last Name</label>
+                        <div class="input-field">
+                            <input type="text" id="reg-last-name" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <div class="input-field input-with-icon">
+                        <i class="ph ph-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="Email Address" required>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Password</label>
+                        <div class="input-field input-with-icon">
+                            <i class="ph ph-lock"></i>
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Confirm Password</label>
+                        <div class="input-field">
+                            <input type="password" placeholder="Confirm" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Address</label>
+                        <div class="input-field">
+                            <input type="text" id="reg-address" placeholder="Address" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>State</label>
+                        <div class="input-field">
+                            <select id="reg-state" required>
+                                <option value="" disabled selected>Select State</option>
+                                <option value="NY">New York</option>
+                                <option value="CA">California</option>
+                                <option value="TX">Texas</option>
+                                <option value="FL">Florida</option>
+                            </select>
+                            <i class="ph ph-caret-down" style="left: auto; right: 14px;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkbox-container">
+                    <label class="reg-checkbox">
+                        <input type="checkbox" required>
+                        <span>I agree to the <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a></span>
+                    </label>
+                    <label class="reg-checkbox">
+                        <input type="checkbox">
+                        <span>I would like to receive news and updates</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="cta-btn primary-cta" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">Sign Up</button>
+            </form>
+
+            <script>
+                function saveRegistrationData(event) {
+                    event.preventDefault();
+                    localStorage.setItem('user_first_name', document.getElementById('reg-first-name').value);
+                    localStorage.setItem('user_last_name', document.getElementById('reg-last-name').value);
+                    localStorage.setItem('user_email', document.getElementById('reg-email').value);
+                    localStorage.setItem('user_address', document.getElementById('reg-address').value);
+                    localStorage.setItem('user_state', document.getElementById('reg-state').value);
+                    window.location.href = 'verification.html';
+                }
+            </script>
+
+            <div class="reg-footer">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-top: 10px;
+        }
+
+        .notifications-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .clear-all-btn {
+            background: #FFB300;
+            color: #000;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clear-all-btn:active {
+            transform: scale(0.95);
+        }
+
+        .notifications-subtitle {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-card {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 179, 0, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            position: relative;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notification-icon-box {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-icon-box i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .notification-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FAF9F6;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+        }
+
+        .notification-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+
+        .notification-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 4px;
+        }
+
+        .notification-stats {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .stat-price {
+            color: #fff;
+        }
+
+        .stat-percent {
+            color: #00c9a7;
+            font-size: 13px;
+        }
+
+        .no-notifications {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .no-notifications i {
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .no-notifications p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+        <div class="side-menu-list">
+            <a href="dashboard.html" class="side-menu-item">
+                <i class="ph-fill ph-circles-four"></i>
+                Market Terminal
+            </a>
+            <a href="history.html" class="side-menu-item">
+                <i class="ph-fill ph-clock-counter-clockwise"></i>
+                Trade History
+            </a>
+            <a href="support.html" class="side-menu-item">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="help.html" class="side-menu-item">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+            <a href="index.html" class="side-menu-item logout-item">
+                <i class="ph-bold ph-sign-out"></i>
+                Log Out
+            </a>
+        </div>
+    </div>
+
+    <div class="main-wrapper dash-wrapper">
+        <header class="dash-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="ph ph-list" style="font-size: 24px; color: #fff; cursor: pointer;"
+                    onclick="toggleSidebar()"></i>
+                <h1 class="reg-logo" style="margin-bottom: 0;">CoinNest</h1>
+            </div>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <a href="notifications.html" style="text-decoration: none;"><i class="ph-fill ph-bell"
+                        style="font-size: 24px; color: var(--primary);"></i></a>
+                <a href="profile.html" style="text-decoration: none;"><i class="ph ph-user-circle"
+                        style="font-size: 28px; color: #fff;"></i></a>
+            </div>
+        </header>
+
+        <div class="notifications-header">
+            <h1 class="notifications-title">Notifications</h1>
+            <button class="clear-all-btn" onclick="clearAllNotifications()">
+                Clear All
+            </button>
+        </div>
+        <p class="notifications-subtitle">Track all your account and trade activity in real-time.</p>
+        <div class="notification-list" id="notification-list">
+            <!-- Dynamic notifications injected here -->
+        </div>
+
+        <div class="no-notifications" id="no-notifications">
+            <i class="ph ph-bell-slash"></i>
+            <p>You have no new notifications.</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notification-list');
+            const noNotifs = document.getElementById('no-notifications');
+            const notifications = JSON.parse(localStorage.getItem('user_notifications')) || [
+                // Default notifications if none exist
+                {
+                    id: 1,
+                    title: "Welcome to CoinNest!",
+                    desc: "Your account is active. Start trading with our high-precision market data.",
+                    time: "1 day ago",
+                    icon: "ph-fill ph-rocket-launch"
+                },
+                {
+                    id: 2,
+                    title: "KYC Verified",
+                    desc: "Your identity verification was successful. You now have full access to withdrawals.",
+                    time: "12 hours ago",
+                    icon: "ph-fill ph-shield-check"
+                }
+            ];
+
+            if (notifications.length === 0) {
+                list.style.display = 'none';
+                noNotifs.style.display = 'block';
+                return;
+            }
+
+            list.style.display = 'flex';
+            noNotifs.style.display = 'none';
+            
+            list.innerHTML = notifications.map((n, index) => `
+                <div class="notification-card" style="animation-delay: ${index * 0.1}s">
+                    <div class="notification-icon-box">
+                        <i class="${n.icon || 'ph-fill ph-bell'}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-top">
+                            <span class="notification-card-title">${n.title}</span>
+                            <span class="notification-time">${n.time}</span>
+                        </div>
+                        <p class="notification-desc">${n.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearAllNotifications() {
+            const list = document.getElementById('notification-list');
+            const cards = list.querySelectorAll('.notification-card');
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateX(20px)';
+                    if (index === cards.length - 1) {
+                        setTimeout(() => {
+                            localStorage.setItem('user_notifications', JSON.stringify([]));
+                            renderNotifications();
+                        }, 300);
+                    }
+                }, index * 100);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderNotifications);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .help-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .help-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 179, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .help-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .help-step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-num {
+            min-width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .step-content h4 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .step-content p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .help-search-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .help-search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+            <a href="dashboard.html" class="side-menu-item">
+                <i class="ph-fill ph-circles-four"></i>
+                Market Terminal
+            </a>
+            <a href="history.html" class="side-menu-item">
+                <i class="ph-fill ph-clock-counter-clockwise"></i>
+                Trade History
+            </a>
+            <a href="support.html" class="side-menu-item">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="help.html" class="side-menu-item active">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+            <a href="index.html" class="side-menu-item logout-item">
+                <i class="ph-bold ph-sign-out"></i>
+                Log Out
+            </a>
+    </div>
+
+    <div class="main-wrapper dash-wrapper" style="padding-top: 10px;">
+        <header class="dash-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="ph ph-list" style="font-size: 24px; color: #fff; cursor: pointer;"
+                    onclick="toggleSidebar()"></i>
+                <h1 class="reg-logo" style="margin-bottom: 0;">CoinNest</h1>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="notifications.html" style="text-decoration: none;"><i class="ph ph-bell"
+                        style="font-size: 22px; color: #fff;"></i></a>
+                <a href="profile.html" style="text-decoration: none;"><i class="ph ph-user-circle"
+                        style="font-size: 22px; color: #fff;"></i></a>
+            </div>
+        </header>
+
+        <div style="margin-top: 30px;">
+            <h2 style="font-size: 28px; color: #fff; line-height: 1.2;">How can we <span class="gold">help you</span>
+                today?</h2>
+            <div class="help-search-box">
+                <i class="ph ph-magnifying-glass" style="color: var(--primary); font-size: 20px;"></i>
+                <input type="text" placeholder="Search for guides, rules, or FAQs...">
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; display: grid; gap: 20px;">
+
+            <!-- Guide Section: Getting Started -->
+            <div class="help-card">
+                <div class="help-icon"><i class="ph-fill ph-rocket-launch"></i></div>
+                <h3 style="color: #fff; margin-bottom: 20px;">Platform Quick Start Guide</h3>
+
+                <div class="help-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Create Account & Verify</h4>
+                        <p>Sign up with your email and proceed to the **Verification** page. You must upload a clear
+                            image of your Identity Document for security compliance. Trading is restricted until an
+                            administrator approves your verification.</p>
+                    </div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Fund Your Wallet</h4>
+                        <p>Go to the **Wallet** section and copy your unique USDT (BEP20) deposit address. Transfer
+                            funds from your external wallet. Once sent, contact **Customer Care** with your txn hash for
+                            instant credit.</p>
+                    </div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>Start Trading</h4>
+                        <p>Navigate to the **Trade** tab. Select your asset (BTC, ETH, etc.) and choose a direction
+                            (Buy/Sell). If you have been granted a "Win Signal" by the platform administrator, your
+                            outcomes will be optimized for success.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide Section: Rules & Policies -->
+            <div class="help-card">
+                <div class="help-icon"><i class="ph-fill ph-shield-check"></i></div>
+                <h3 style="color: #fff; margin-bottom: 20px;">Security & Withdrawal Rules</h3>
+
+                <div class="help-step">
+                    <div class="step-content">
+                        <h4 style="color: var(--primary);"><i class="ph ph-warning-circle"></i> Manual Approval Required
+                        </h4>
+                        <p>To prevent unauthorized access, every withdrawal from CoinNest requires manual authorization.
+                            After submitting a withdrawal request in the wallet, you **must** message our Customer Care
+                            team in the support chat to finalize the payout.</p>
+                    </div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-content">
+                        <h4>2FA and Account Safety</h4>
+                        <p>Never share your password or referral code with anyone. Official CoinNest admins will never
+                            ask for your private keys. Always check the "Account Status" indicator in your profile to
+                            ensure your sessions are secure.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div style="margin-top: 20px; padding-bottom: 100px;">
+                <h3 style="color: #fff; margin-bottom: 15px;">Frequently Asked Questions</h3>
+                <div class="help-card" style="padding: 15px 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 14px; font-weight: 500; color: #fff;">How long does verification
+                            take?</span>
+                        <i class="ph ph-caret-down" style="color: var(--primary);"></i>
+                    </div>
+                    <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 10px;">Admins typically review
+                        KYC documents within 2-6 hours. You will receive a notification once approved.</p>
+                </div>
+                <div class="help-card" style="padding: 15px 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 14px; font-weight: 500; color: #fff;">What is a "Win Signal"?</span>
+                        <i class="ph ph-caret-down" style="color: var(--primary);"></i>
+                    </div>
+                    <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 10px;">The Win Signal is a
+                        specialized indicator granted to certain accounts by the administrator, ensuring a higher
+                        probability of success during active sessions.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-chart-bar"></i>
+            <span>Markets</span>
+        </a>
+        <a href="trade.html" class="nav-item">
+            <i class="ph ph-arrows-left-right"></i>
+            <span>Trade</span>
+        </a>
+        <a href="wallet.html" class="nav-item">
+            <i class="ph ph-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <i class="ph ph-bell"></i>
+            <span>Alerts</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>

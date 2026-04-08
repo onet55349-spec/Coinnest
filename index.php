@@ -1,0 +1,101 @@
+<?php
+require_once 'includes/auth.php';
+
+if (isLoggedIn()) {
+    header("Location: dashboard.php");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinNest | Your Gateway to the Crypto World</title>
+    <meta name="description"
+        content="Buy, sell, and trade cryptocurrencies with ease. Join the future of finance today with CoinNest.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+        <div class="side-menu-list">
+            <a href="login.php" class="side-menu-item">
+                <i class="ph-fill ph-sign-in"></i>
+                Log In
+            </a>
+            <a href="register.php" class="side-menu-item">
+                <i class="ph-fill ph-user-plus"></i>
+                Register
+            </a>
+            <a href="#" class="side-menu-item" onclick="alert('Connecting to Customer Support...')">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="#" class="side-menu-item" onclick="alert('How can we help you today?')">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="status-bar"
+            style="display: flex; justify-content: space-between; padding: 5px 0 15px; font-size: 12px; font-weight: 600; opacity: 0.8;">
+        </div>
+        <header>
+            <div class="hamburger" id="mobile-menu" aria-label="Open Menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-actions">
+                <a href="login.php" class="login-link">Log In</a>
+                <a href="register.php" class="register-btn">Register</a>
+            </div>
+        </header>
+
+        <main class="hero">
+            <h1 class="brand-name">CoinNest</h1>
+            <h2 class="hero-title">Your Gateway to<br>the Crypto World</h2>
+            <p class="hero-description">
+                Buy, sell, and trade<br>
+                cryptocurrencies with ease.<br>
+                Join the future of finance today!
+            </p>
+            <p class="tagline">
+                Trade Smart, Trade Secure,<br>
+                Trade with Confidence.
+            </p>
+        </main>
+
+        <footer class="footer-actions">
+            <a href="register.php" class="cta-btn primary-cta">Get Started</a>
+            <a href="login.php" class="cta-btn secondary-cta">Log In</a>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+        <div class="side-menu-list">
+            <a href="dashboard.html" class="side-menu-item">
+                <i class="ph-fill ph-circles-four"></i>
+                Market Terminal
+            </a>
+            <a href="history.html" class="side-menu-item active">
+                <i class="ph-fill ph-clock-counter-clockwise"></i>
+                Trade History
+            </a>
+            <a href="support.html" class="side-menu-item">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="help.html" class="side-menu-item">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+            <a href="index.html" class="side-menu-item logout-item">
+                <i class="ph-bold ph-sign-out"></i>
+                Log Out
+            </a>
+        </div>
+    </div>
+
+    <div class="main-wrapper dash-wrapper">
+        <header class="dash-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="ph ph-list" style="font-size: 24px; color: #fff; cursor: pointer;"
+                    onclick="toggleSidebar()"></i>
+                <h1 class="reg-logo" style="margin-bottom: 0;">CoinNest</h1>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="notifications.html" style="text-decoration: none;"><i class="ph ph-bell"
+                        style="font-size: 22px; color: #fff;"></i></a>
+                <a href="profile.html" style="text-decoration: none;"><i class="ph ph-user-circle"
+                        style="font-size: 22px; color: #fff;"></i></a>
+            </div>
+        </header>
+
+        <!-- Wallet Tabs -->
+        <div class="auth-tabs" style="margin-top: 10px;">
+            <a href="wallet.html" class="auth-tab">Wallet</a>
+            <a href="withdraw.html" class="auth-tab">Withdraw</a>
+            <a href="history.html" class="auth-tab active">History</a>
+        </div>
+
+        <div class="history-section" style="margin-top: 20px;">
+            <h2 class="section-title" style="font-size: 28px;">Recent Activity</h2>
+            <p style="font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 30px;">Track your trades, deposits, and platform activity.</p>
+
+            <div class="history-list" id="history-list">
+                <!-- Dynamic items will be injected here -->
+                <div style="text-align: center; padding: 40px 0; color: rgba(255,255,255,0.2);">
+                    <i class="ph ph-clock-counter-clockwise" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                    <p>No activity yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-chart-bar"></i>
+            <span>Markets</span>
+        </a>
+        <a href="trade.html" class="nav-item">
+            <i class="ph ph-arrows-left-right"></i>
+            <span>Trade</span>
+        </a>
+        <a href="wallet.html" class="nav-item active">
+            <i class="ph-fill ph-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <i class="ph ph-bell"></i>
+            <span>Alerts</span>
+        </a>
+    </nav>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const listContainer = document.getElementById('history-list');
+            const trades = JSON.parse(localStorage.getItem('user_trade_history')) || [];
+            
+            // Map static deposits/withdrawals if needed, or just focus on trades as requested
+            if (trades.length > 0) {
+                listContainer.innerHTML = '';
+                trades.forEach(trade => {
+                    const isWin = trade.status === 'Win';
+                    const amountFormatted = (isWin ? '+' : '') + trade.result.toFixed(4) + ' USDT';
+                    
+                    const itemHtml = `
+                        <div class="history-item">
+                            <div class="history-info">
+                                <span class="history-type">${trade.pair} ${trade.direction}</span>
+                                <span class="history-date">${trade.date}</span>
+                            </div>
+                            <div class="history-amount">
+                                <span class="amount-val" style="color: ${isWin ? '#00c9a7' : '#ff4d4d'}">${amountFormatted}</span>
+                                <span class="status-badge ${isWin ? 'status-success' : 'status-failed'}">${trade.status}</span>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.insertAdjacentHTML('beforeend', itemHtml);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

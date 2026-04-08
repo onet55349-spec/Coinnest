@@ -1,0 +1,21 @@
+# CoinNest Production htaccess
+RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent directory browsing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(sql|md|log|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect includes directory
+<Directory "includes">
+    Order allow,deny
+    Deny from all
+</Directory>

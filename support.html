@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            height: calc(100vh - 280px);
+            margin-top: 20px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            white-space: pre-wrap;
+            /* Preserve newlines */
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: #000;
+            font-weight: 600;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-admin {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-time {
+            font-size: 10px;
+            opacity: 0.5;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: #fff;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .support-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .agent-status {
+            width: 8px;
+            height: 8px;
+            background: #00c9a7;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            box-shadow: 0 0 8px #00c9a7;
+        }
+    </style>
+</head>
+
+<body style="background: #050505;">
+    <div class="bg-container"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-logo">CoinNest</span>
+            <i class="ph ph-x close-side-menu" onclick="toggleSidebar()"></i>
+        </div>
+        <div class="side-menu-list">
+            <a href="dashboard.html" class="side-menu-item">
+                <i class="ph-fill ph-circles-four"></i>
+                Market Terminal
+            </a>
+            <a href="history.html" class="side-menu-item">
+                <i class="ph-fill ph-clock-counter-clockwise"></i>
+                Trade History
+            </a>
+            <a href="support.html" class="side-menu-item active">
+                <i class="ph-fill ph-headset"></i>
+                Customer Care
+            </a>
+            <a href="help.html" class="side-menu-item">
+                <i class="ph-fill ph-info"></i>
+                Help Center
+            </a>
+            <a href="index.html" class="side-menu-item logout-item">
+                <i class="ph-bold ph-sign-out"></i>
+                Log Out
+            </a>
+        </div>
+    </div>
+
+    <div class="main-wrapper dash-wrapper" style="padding-top: 10px;">
+        <header class="dash-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="ph ph-list" style="font-size: 24px; color: #fff; cursor: pointer;"
+                    onclick="toggleSidebar()"></i>
+                <h1 class="reg-logo" style="margin-bottom: 0; font-size: 24px;">CoinNest</h1>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="notifications.html" style="text-decoration: none;"><i class="ph ph-bell"
+                        style="font-size: 22px; color: #fff;"></i></a>
+                <a href="profile.html" style="text-decoration: none;"><i class="ph ph-user-circle"
+                        style="font-size: 22px; color: #fff;"></i></a>
+            </div>
+        </header>
+
+        <div class="support-header" style="margin-top: 25px;">
+            <div
+                style="width: 48px; height: 48px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #000;">
+                <i class="ph-fill ph-headset" style="font-size: 28px;"></i>
+            </div>
+            <div>
+                <h2 style="font-size: 18px; color: #fff; margin-bottom: 4px;">CoinNest Official Support</h2>
+                <span style="font-size: 12px; color: #00c9a7; font-weight: 700;"><span class="agent-status"></span>
+                    Active Agents Online</span>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="msg-bubble msg-admin">
+                    Hello! Welcome to CoinNest Customer Support. How can we assist you with your trades or account
+                    today?
+                    <span class="msg-time">09:40 AM</span>
+                </div>
+            </div>
+            <div class="chat-input-area" style="flex-direction: column; gap: 10px;">
+                <textarea class="chat-input" id="chat-input"
+                    placeholder="Type your message... (Shift+Enter for newline)"
+                    style="resize: none; min-height: 80px; width: 100%;"></textarea>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <i class="ph-bold ph-paper-plane-right" style="font-size: 20px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-chart-bar"></i>
+            <span>Markets</span>
+        </a>
+        <a href="trade.html" class="nav-item">
+            <i class="ph ph-arrows-left-right"></i>
+            <span>Trade</span>
+        </a>
+        <a href="wallet.html" class="nav-item">
+            <i class="ph ph-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <i class="ph ph-bell"></i>
+            <span>Alerts</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+        }
+
+        const messagesBox = document.getElementById('chat-messages');
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value;
+            if (!msg) return;
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Add to UI
+            const userMsg = `
+                <div class="msg-bubble msg-user">
+                    ${msg}
+                    <span class="msg-time">${time}</span>
+                </div>
+            `;
+            messagesBox.innerHTML += userMsg;
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+            input.value = "";
+
+            // Push to Admin Pannel (Simulated Storage)
+            const tickets = JSON.parse(localStorage.getItem('support_tickets') || '[]');
+            tickets.push({
+                user: "Current User",
+                email: localStorage.getItem('user_email') || "user@example.com",
+                message: msg,
+                time: time,
+                timestamp: Date.now()
+            });
+            localStorage.setItem('support_tickets', JSON.stringify(tickets));
+
+            // Optional auto-reply from bot
+            setTimeout(() => {
+                const adminMsg = `
+                    <div class="msg-bubble msg-admin">
+                        Your message has been sent to our administrator. Please stay online for a reply.
+                        <span class="msg-time">${time}</span>
+                    </div>
+                `;
+                messagesBox.innerHTML += adminMsg;
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            }, 1000);
+        }
+
+        // Logic to receive replies from Admin
+        setInterval(() => {
+            const adminReply = localStorage.getItem('admin_reply_to_user');
+            if (adminReply) {
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const replyHtml = `
+                    <div class="msg-bubble msg-admin" style="border: 2px solid var(--primary);">
+                        ${adminReply}
+                        <span class="msg-time">${time}</span>
+                    </div>
+                `;
+                messagesBox.innerHTML += replyHtml;
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+                localStorage.removeItem('admin_reply_to_user'); // Consume the message
+
+                // Alert if tab is hidden
+                if (document.hidden) {
+                    new Notification("CoinNest Support", { body: "Support Agent has replied to you." });
+                }
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>

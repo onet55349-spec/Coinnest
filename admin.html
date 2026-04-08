@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | CoinNest Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --admin-primary: #FFB300;
+            --admin-bg: #0D0D0D;
+            --admin-side: #141414;
+            --admin-card: #1A1A1A;
+            --admin-text: #FFFFFF;
+            --admin-text-dim: rgba(255, 255, 255, 0.4);
+            --admin-border: rgba(255, 255, 255, 0.05);
+            --admin-success: #00c9a7;
+            --admin-danger: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: var(--admin-side);
+            border-right: 1px solid var(--admin-border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 30px 24px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--admin-primary);
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 0 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--admin-text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-link.active {
+            color: var(--admin-primary);
+            background: rgba(255, 179, 0, 0.08);
+        }
+
+        .nav-link i {
+            font-size: 18px;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid var(--admin-border);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--admin-danger);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: var(--admin-text-dim);
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--admin-card);
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--admin-border);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--admin-card);
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid var(--admin-border);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--admin-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--admin-success);
+        }
+
+        .stat-val {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--admin-text-dim);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section-card {
+            background: var(--admin-card);
+            border-radius: 24px;
+            border: 1px solid var(--admin-border);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .btn-sm {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--admin-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--admin-primary);
+            color: #000;
+            border: none;
+        }
+
+        /* Table Styles */
+        .admin-table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--admin-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        td {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--admin-border);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: rgba(0, 201, 167, 0.1);
+            color: var(--admin-success);
+        }
+
+        .status-pending {
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--admin-primary);
+        }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-icon {
+            color: var(--admin-text-dim);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .action-icon:hover {
+            color: #fff;
+        }
+
+        /* Form Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: var(--admin-card);
+            width: 450px;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid var(--admin-border);
+        }
+
+        .modal-header {
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--admin-text-dim);
+        }
+
+        .admin-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--admin-border);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="ph ph-shield-check"></i>
+            AdminPanel
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" onclick="switchSection('dashboard')">
+                <i class="ph-fill ph-circles-four"></i>
+                Dashboard
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('users')">
+                <i class="ph ph-users"></i>
+                User Management
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('kyc')">
+                <i class="ph ph-identification-card"></i>
+                KYC Review Hub
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('withdrawals')">
+                <i class="ph ph-hand-coins"></i>
+                Withdrawal Requests
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('chat')">
+                <i class="ph ph-chat-centered-text"></i>
+                Support Chat
+                <span id="chat-count"
+                    style="background: var(--admin-danger); color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: auto;">2</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('notifications')">
+                <i class="ph ph-megaphone"></i>
+                Notify Users
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('settings')">
+                <i class="ph ph-gear-six"></i>
+                Platform Settings
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="logout-btn">
+                <i class="ph ph-sign-out"></i>
+                Return to Site
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1 id="topbar-title">Dashboard Overview</h1>
+                <p>Welcome back, Administrator.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="user-avatar" style="background: var(--admin-primary); color: #000;">AD</div>
+                <div style="font-size: 14px; font-weight: 700;">Admin User</div>
+            </div>
+        </header>
+
+        <!-- Sections: Dashboard -->
+        <div id="section-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><i class="ph ph-users"></i></div>
+                        <span class="stat-change">+12%</span>
+                    </div>
+                    <div class="stat-val">1,284</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><i class="ph ph-wallet"></i></div>
+                        <span class="stat-change">+5%</span>
+                    </div>
+                    <div class="stat-val">$245.8k</div>
+                    <div class="stat-label">Total Balances</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(255, 77, 77, 0.1); color: var(--admin-danger);">
+                            <i class="ph ph-identification-badge"></i></div>
+                        <span class="stat-change" style="color: var(--admin-danger);">Pending</span>
+                    </div>
+                    <div class="stat-val" id="pending-kyc-val">18</div>
+                    <div class="stat-label">KYC Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(0, 201, 167, 0.1); color: var(--admin-success);">
+                            <i class="ph ph-check-circle"></i></div>
+                        <span class="stat-change">Active</span>
+                    </div>
+                    <div class="stat-val" id="pending-withdraw-val">4</div>
+                    <div class="stat-label">Pending Withdraws</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Recent Users Activity</h2>
+                    <a href="#" class="btn-sm" onclick="switchSection('users')">View All Users</a>
+                </div>
+                <div class="admin-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name / Email</th>
+                                <th>Registration Date</th>
+                                <th>KYC Status</th>
+                                <th>Balance</th>
+                                <th>Win %</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-users-tbody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Users -->
+        <div id="section-users" style="display: none;">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>All Platform Users</h2>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="admin-input" style="width: 250px; padding: 8px 15px;"
+                            placeholder="Search user email...">
+                        <button class="btn-sm btn-primary">+ New User</button>
+                    </div>
+                </div>
+                <div class="admin-table-container">
+                    <table id="all-users-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Join Date</th>
+                                <th>Balance</th>
+                                <th>Win Rate</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-users-tbody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: KYC -->
+        <div id="section-kyc" style="display: none;">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Identity Review Hub</h2>
+                </div>
+                <div class="admin-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Document Type</th>
+                                <th>Submission Date</th>
+                                <th>Document Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kyc-tbody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Withdrawals -->
+        <div id="section-withdrawals" style="display: none;">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Pending Withdrawal Approvals</h2>
+                    <p style="font-size: 13px; color: var(--admin-text-dim);">Users must contact customer care to
+                        initiate approval.</p>
+                </div>
+                <div class="admin-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Wallet Address</th>
+                                <th>Method</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdraw-tbody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Chat -->
+        <div id="section-chat" style="display: none;">
+            <div style="display: grid; grid-template-columns: 300px 1fr; gap: 24px; height: calc(100vh - 250px);">
+                <!-- Chat List -->
+                <div class="section-card" style="padding: 20px; overflow-y: auto;">
+                    <h3 style="font-size: 16px; margin-bottom: 20px;">Support Tickets</h3>
+                    <div id="chat-list-container" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Chat Items -->
+                    </div>
+                </div>
+                <!-- Chat View -->
+                <div class="section-card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+                    <div id="chat-header"
+                        style="padding: 20px; border-bottom: 1px solid var(--admin-border); display: flex; align-items: center; gap: 15px;">
+                        <div class="user-avatar" id="chat-avatar">?</div>
+                        <div>
+                            <h4 id="chat-user-name">Select a conversation</h4>
+                            <span style="font-size: 12px; color: var(--admin-success);">Online</span>
+                        </div>
+                    </div>
+                    <div id="chat-messages"
+                        style="flex: 1; padding: 25px; overflow-y: auto; background: rgba(255,255,255,0.01); display: flex; flex-direction: column; gap: 15px; white-space: pre-wrap;">
+                        <!-- Messages -->
+                        <div style="text-align: center; color: var(--admin-text-dim); margin-top: 50px;">
+                            <i class="ph ph-chat-centered-dots" style="font-size: 48px; opacity: 0.2;"></i>
+                            <p>Pick a ticket to start chatting with user</p>
+                        </div>
+                    </div>
+                    <div
+                        style="padding: 20px; border-top: 1px solid var(--admin-border); display: flex; flex-direction: column; gap: 10px;">
+                        <textarea id="admin-chat-input" class="admin-input"
+                            placeholder="Type your multi-line reply here... (Shift+Enter for newline)"
+                            style="flex: 1; resize: none; min-height: 80px;"></textarea>
+                        <button class="btn-sm btn-primary" style="align-self: flex-end; padding: 8px 25px;"
+                            onclick="adminSendMessage()">Send Multi-line Reply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Notifications -->
+        <div id="section-notifications" style="display: none;">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Broadcast Notifier</h2>
+                    <p style="font-size: 13px; color: var(--admin-text-dim);">Send platform-wide alerts or targeted
+                        messages.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 15px; max-width: 600px;">
+                    <div class="input-group">
+                        <label class="input-label">Select Recipient</label>
+                        <select class="admin-input" id="notif-recipient">
+                            <option value="all">All Users</option>
+                            <option value="verified">Verified Users Only</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Target Email (Optional)</label>
+                        <input type="text" class="admin-input" id="notif-target-email"
+                            placeholder="e.g. user@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Notification Type</label>
+                        <select class="admin-input" id="notif-type">
+                            <option value="bell">Generic Alert</option>
+                            <option value="coins">Wallet / Deposit</option>
+                            <option value="arrow-up-right">Trade / Execution</option>
+                            <option value="shield">Security / KYC</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Notification Title</label>
+                        <input type="text" class="admin-input" id="notif-title"
+                            placeholder="e.g. Account Alert: Withdrawal Successful">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Message Content</label>
+                        <textarea class="admin-input" id="notif-content" rows="4"
+                            placeholder="Type your message to the user..."></textarea>
+                    </div>
+                    <button class="btn-sm btn-primary" style="padding: 14px; font-size: 15px;"
+                        onclick="sendNotification()">Push Notification to System</button>
+                    <div id="notif-status"
+                        style="display: none; font-size: 12px; color: var(--admin-success); font-weight: 700; text-align: center;">
+                        Notification successfully pushed to user database!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Settings -->
+        <div id="section-settings" style="display: none;">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Platform Configuration</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--admin-primary);">Deposit Settings
+                        </h3>
+                        <div class="input-group">
+                            <label class="input-label">Global USDT (BEP20) Address</label>
+                            <input type="text" id="admin-address-input" class="admin-input" value="0x8920...2a78">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">QR Code URL (Image Path)</label>
+                            <input type="text" id="admin-qr-input" class="admin-input"
+                                placeholder="e.g. assets/qr-code.png">
+                            <p style="font-size: 11px; color: var(--admin-text-dim); margin-top: 5px;">Update this to
+                                change the QR image shown to users on the deposit page.</p>
+                        </div>
+                        <button class="btn-sm btn-primary" onclick="saveSettings()">Save Configuration</button>
+                    </div>
+                    <div
+                        style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px dashed var(--admin-border);">
+                        <h3 style="font-size: 16px; margin-bottom: 10px;">Maintenance Mode</h3>
+                        <p style="font-size: 13px; color: var(--admin-text-dim); margin-bottom: 20px;">When enabled,
+                            regular users cannot trade or withdraw.</p>
+                        <button class="btn-sm" style="background: var(--admin-danger);">Enable Maintenance</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Control User Account</h2>
+                <p style="font-size: 13px; color: var(--admin-text-dim);">Modify balance and win rate for this user.</p>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Account Balance (USD)</label>
+                <input type="number" class="admin-input" id="new-balance-input" placeholder="0.00">
+            </div>
+            <div class="input-group">
+                <label class="input-label">User Winning Percentage (%)</label>
+                <select class="admin-input" id="new-win-percent">
+                    <option value="10">10% (High Risk)</option>
+                    <option value="50">50% (Neutral)</option>
+                    <option value="75">75% (Profitable)</option>
+                    <option value="95">95% (Guaranteed Win)</option>
+                    <option value="0">0% (Loser Account)</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-sm btn-primary" style="flex: 1; padding: 12px;" onclick="saveAccountChanges()">Update
+                    User</button>
+                <button class="btn-sm" style="flex: 1; padding: 12px;" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div class="overlay" id="doc-modal">
+        <div class="modal" style="width: 600px; padding: 0; overflow: hidden;">
+            <div
+                style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border);">
+                <h4>Verification Identity Document</h4>
+                <i class="ph ph-x" style="cursor: pointer;" onclick="closeDocModal()"></i>
+            </div>
+            <div style="padding: 10px; background: #000; text-align: center;">
+                <img id="doc-view-img" src="" style="max-width: 100%; max-height: 400px; filter: contrast(1.1);">
+                <p style="color: #fff; font-size: 11px; margin-top: 10px; opacity: 0.5;">ID VERIFICATION MOCK - IMAGE
+                    PREVIEW</p>
+            </div>
+            <div style="padding: 20px; display: flex; gap: 10px;">
+                <button class="btn-sm btn-primary" style="flex: 1;" onclick="approveKyc()">Approve Verified</button>
+                <button class="btn-sm" style="flex: 1; color: var(--admin-danger);" onclick="closeDocModal()">Reject
+                    Document</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock State
+        const users = [
+            { id: 1, name: "edfew ewf", email: "dsafs@wesf", date: "2026-04-06", kyc: "Verified", balance: "0.00", winRate: "50%" },
+            { id: 2, name: "John Doe", email: "john@doe.com", date: "2026-04-05", kyc: "Pending", balance: "1,240.50", winRate: "75%" },
+            { id: 3, name: "Sarah Smith", email: "sarah.s@gmail.com", date: "2026-04-05", kyc: "Verified", balance: "8,920.00", winRate: "95%" },
+            { id: 4, name: "Mike Ross", email: "mike@ross.co", date: "2026-04-04", kyc: "Failed", balance: "15.00", winRate: "10%" },
+            { id: 5, name: "Ana Bella", email: "ana@design.it", date: "2026-04-03", kyc: "Verified", balance: "420.00", winRate: "50%" }
+
+        ];
+
+        const chatTickets = [
+            { id: 1, name: "John Doe", lastMsg: "Please approve my withdrawal of $500", time: "2 min ago", avatar: "JD" },
+            { id: 2, name: "Ana Bella", lastMsg: "Where do I send the USDT?", time: "15 min ago", avatar: "AB" }
+        ];
+
+        const withdrawals = [
+            { id: 1, user: "John Doe", amount: "$500.00", address: "0x123...abc", method: "USDT (BEP20)" },
+            { id: 2, user: "Sarah Smith", amount: "$2,400.00", address: "0x789...xyz", method: "Bitcoin" }
+        ];
+
+        let selectedUserId = null;
+        let activeChatId = null;
+
+        function populateTables() {
+            const recentTbody = document.getElementById('recent-users-tbody');
+            const allTbody = document.getElementById('all-users-tbody');
+            const kycTbody = document.getElementById('kyc-tbody');
+            const withdrawTbody = document.getElementById('withdraw-tbody');
+
+            const rowsHtml = users.map(user => `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-avatar">${user.name.substring(0, 2).toUpperCase()}</div>
+                            <div>
+                                <div style="font-weight: 700;">${user.name}</div>
+                                <div style="font-size: 12px; color: var(--admin-text-dim);">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${user.date}</td>
+                    <td><span class="status-pill ${user.kyc === 'Verified' ? 'status-active' : 'status-pending'}">${user.kyc}</span></td>
+                    <td style="font-weight: 700;">$${user.balance}</td>
+                    <td><span style="color: var(--admin-primary); font-weight: 800;">${user.winRate}</span></td>
+                    <td>
+                        <div class="action-row">
+                            <i class="ph ph-megaphone action-icon" style="color: var(--admin-primary);" onclick="openNotificationModal('${user.email}')" title="Send Notification"></i>
+                            <i class="ph ph-note-pencil action-icon" onclick="openAccountModal(${user.id})"></i>
+                            <i class="ph ph-trash action-icon" style="color: var(--admin-danger);" onclick="deleteUser(${user.id})"></i>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            recentTbody.innerHTML = rowsHtml.slice(0, 3);
+            allTbody.innerHTML = rowsHtml;
+
+            kycTbody.innerHTML = users.filter(u => u.kyc === 'Pending').map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>Passport Identity Card</td>
+                    <td>${user.date}</td>
+                    <td><span style="color: var(--admin-primary); font-size: 13px; font-weight: 700; cursor: pointer;" onclick="viewDocument('${user.name}')">view_identity_passport.jpg</span></td>
+                    <td>
+                        <button class="btn-sm btn-primary" onclick="viewDocument('${user.name}')">Review</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            withdrawTbody.innerHTML = withdrawals.map(w => `
+                <tr>
+                    <td>${w.user}</td>
+                    <td style="font-weight: 800; color: #fff;">${w.amount}</td>
+                    <td style="font-family: monospace; font-size: 12px; color: rgba(255,255,255,0.6);">${w.address}</td>
+                    <td>${w.method}</td>
+                    <td>
+                        <button class="btn-sm btn-primary" onclick="alert('Withdrawal Approved and Processed!')">Approve</button>
+                        <button class="btn-sm" style="color: var(--admin-danger);" onclick="alert('Withdrawal Rejected.')">Reject</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Update counts
+            document.getElementById('pending-kyc-val').innerText = users.filter(u => u.kyc === 'Pending').length;
+            document.getElementById('pending-withdraw-val').innerText = withdrawals.length;
+        }
+
+        function populateChatList() {
+            const list = document.getElementById('chat-list-container');
+            const tickets = JSON.parse(localStorage.getItem('support_tickets') || '[]');
+
+            if (tickets.length === 0) {
+                list.innerHTML = `<div style="text-align: center; color: var(--admin-text-dim); padding-top: 50px;">No active support tickets from users currently.</div>`;
+                return;
+            }
+
+            // Group tickets by email or user
+            list.innerHTML = tickets.map((t, idx) => `
+                <div class="chat-item" onclick="openChat(${idx}, '${t.email}')" style="padding: 15px; border-radius: 12px; cursor: pointer; background: ${activeChatId === idx ? 'rgba(255,179,0,0.1)' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${activeChatId === idx ? 'var(--admin-primary)' : 'transparent'}; transition: 0.2s;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="user-avatar" style="width: 38px; height: 38px; font-size: 14px;">${t.user.substring(0, 2).toUpperCase()}</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 700; font-size: 14px;">${t.email}</span>
+                                <span style="font-size: 10px; color: var(--admin-text-dim);">${t.time}</span>
+                            </div>
+                            <p style="font-size: 11px; color: var(--admin-text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 150px;">${t.message}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openChat(id, email) {
+            activeChatId = id;
+            const tickets = JSON.parse(localStorage.getItem('support_tickets') || '[]');
+            const ticket = tickets[id];
+            document.getElementById('chat-user-name').innerText = ticket.email;
+            document.getElementById('chat-avatar').innerText = ticket.user.substring(0, 2).toUpperCase();
+
+            const messages = document.getElementById('chat-messages');
+            messages.innerHTML = `
+                <div style="align-self: flex-start; background: rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 15px; max-width: 80%; font-size: 14px;">
+                    ${ticket.message}
+                    <div style="font-size: 10px; color: var(--admin-text-dim); margin-top: 5px;">${ticket.time}</div>
+                </div>
+            `;
+            populateChatList();
+        }
+
+        function adminSendMessage() {
+            const input = document.getElementById('admin-chat-input');
+            const msg = input.value;
+            if (!msg || activeChatId === null) return;
+
+            // In our simple mock, we push the reply to the current user's session
+            localStorage.setItem('admin_reply_to_user', msg);
+
+            const messages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.style.cssText = "align-self: flex-end; background: var(--admin-primary); color: #000; padding: 12px 16px; border-radius: 15px; max-width: 80%; font-size: 14px; font-weight: 500;";
+            div.innerHTML = `${msg} <div style="font-size: 10px; color: #000; opacity: 0.5; margin-top: 5px;">Reply Sent via Live Sync</div>`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+            input.value = "";
+
+            alert('Reply successfully sent to the user!');
+        }
+
+        function switchSection(sectionId) {
+            ['dashboard', 'users', 'kyc', 'withdrawals', 'chat', 'notifications', 'settings'].forEach(s => {
+                const el = document.getElementById(`section-${s}`);
+                if (el) el.style.display = 'none';
+            });
+
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) target.style.display = 'block';
+
+            const titles = {
+                'dashboard': 'Dashboard Overview',
+                'users': 'User Management',
+                'kyc': 'Identity Review Hub',
+                'withdrawals': 'Withdrawal Approvals',
+                'chat': 'Customer Support Chat',
+                'notifications': 'Broadcast Notifier',
+                'settings': 'Platform Configuration'
+            };
+            document.getElementById('topbar-title').innerText = titles[sectionId] || 'Admin Panel';
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+            if (sectionId === 'chat') populateChatList();
+        }
+
+        function viewDocument(name) {
+            document.getElementById('doc-view-img').src = "https://images.unsplash.com/photo-1554126807-6b10f6f6632a?w=800&auto=format&fit=crop";
+            document.getElementById('doc-modal').style.display = 'flex';
+        }
+
+        function approveKyc() {
+            alert('User profile verified successfully!');
+            closeDocModal();
+        }
+
+        function closeDocModal() {
+            document.getElementById('doc-modal').style.display = 'none';
+        }
+
+        function openAccountModal(id) {
+            selectedUserId = id;
+            const user = users.find(u => u.id === id);
+            document.getElementById('new-balance-input').value = user.balance.replace(',', '');
+            document.getElementById('new-win-percent').value = user.winRate.replace('%', '');
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function saveAccountChanges() {
+            const newVal = document.getElementById('new-balance-input').value;
+            const newWin = document.getElementById('new-win-percent').value;
+            const user = users.find(u => u.id === selectedUserId);
+            if (user) {
+                user.balance = parseFloat(newVal).toLocaleString(undefined, { minimumFractionDigits: 2 });
+                user.winRate = newWin + "%";
+
+                // Save to Global Platform State
+                localStorage.setItem('user_balance', newVal);
+                localStorage.setItem('user_win_rate', newWin + "%");
+
+                populateTables();
+                closeModal();
+                alert('User Account Settings Updated: Balance and Win Rate have been pushed to the live system.');
+            }
+        }
+
+        function openNotificationModal(email) {
+            switchSection('notifications');
+            document.getElementById('notif-target-email').value = email;
+            document.getElementById('notif-recipient').value = "all"; // Reset to all but highlight email
+        }
+
+        function sendNotification() {
+            const title = document.getElementById('notif-title').value;
+            const msg = document.getElementById('notif-content').value;
+            const type = document.getElementById('notif-type').value;
+            const targetEmail = document.getElementById('notif-target-email').value;
+
+            if (!title || !msg) return alert('Please fill in title and message.');
+
+            const newNotif = {
+                id: Date.now(),
+                title: title,
+                desc: msg,
+                time: "Just now",
+                icon: `ph-fill ph-${type}`,
+                target: targetEmail || "All",
+                timestamp: new Date().toISOString()
+            };
+
+            let allNotifs = JSON.parse(localStorage.getItem('user_notifications')) || [];
+            allNotifs.unshift(newNotif);
+            localStorage.setItem('user_notifications', JSON.stringify(allNotifs));
+
+            // Visual feedback
+            const status = document.getElementById('notif-status');
+            status.style.display = 'block';
+            setTimeout(() => { status.style.display = 'none'; }, 3000);
+
+            // Clear inputs
+            document.getElementById('notif-title').value = "";
+            document.getElementById('notif-content').value = "";
+            document.getElementById('notif-target-email').value = "";
+
+            alert('Notification successfully dispatched to the ' + (targetEmail || 'entire platform') + '!');
+        }
+
+        function saveSettings() {
+            const addr = document.getElementById('admin-address-input').value;
+            const qr = document.getElementById('admin-qr-input').value;
+            localStorage.setItem('platform_usdt_address', addr);
+            localStorage.setItem('platform_qr_url', qr);
+            alert('Platform settings updated successfully.');
+        }
+
+        // Initialize
+        populateTables();
+    </script>
+</body>
+
+</html>
